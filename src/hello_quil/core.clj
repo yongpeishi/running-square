@@ -34,11 +34,21 @@
      :x-dir new-x-dir
      :y-dir new-y-dir}))
 
+(defn key-pressed [state event]
+  (let [{:keys [x y x-dir y-dir]} state]
+    (println (q/key-code))
+    (if (= 32 (q/key-code))
+      {:x x
+       :y y
+       :x-dir (* x-dir -1)
+       :y-dir (* y-dir -1)})))
+
 (q/defsketch my-square
   :title "my sqr"
   :size [500 500]
   :setup setup
   :draw draw
   :update update
+  :key-pressed key-pressed
   :middleware [m/fun-mode])
 
