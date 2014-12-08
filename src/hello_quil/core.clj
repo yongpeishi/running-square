@@ -2,8 +2,6 @@
   (:require [quil.core :as q]
             [quil.middleware :as m]))
 
-
-
 (defn setup []
   (q/background 200)
   {:x 10
@@ -35,9 +33,9 @@
 
 (defn update [state]
   (let [{:keys [x y x-dir y-dir dir]} state
-
         {:keys [new-x-dir new-y-dir]} (or (change-xy dir [x y])
                                         {:new-x-dir x-dir :new-y-dir y-dir})]
+    (q/background 200)
     {:x (+ x new-x-dir)
      :y (+ y new-y-dir)
      :x-dir new-x-dir
@@ -45,14 +43,12 @@
      :dir dir}))
 
 (defn key-pressed [state event]
-  (let [{:keys [x y x-dir y-dir dir]} state]
-    (println (q/key-code))
-    (if (= 32 (q/key-code))
-      {:x x
-       :y y
-       :x-dir (* x-dir -1)
-       :y-dir (* y-dir -1)
-       :dir (* dir -1)})))
+  (println (q/key-code))
+  (if (= 32 (q/key-code))
+    (-> state
+        (update-in [:x-dir] * -1)
+        (update-in [:y-dir] * -1)
+        (update-in [:dir] * -1))))
 
 (q/defsketch my-square
   :title "my sqr"
